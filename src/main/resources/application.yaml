@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: searchApi
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  session:
+    timeout: 2592000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/my_db
+    username: root
+    password: aini321182562407
+server:
+  address: 0.0.0.0
+  port: 8101
+  servlet:
+    context-path: /search
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete
+      logic-not-delete-value: 0
+      logic-delete-value: 1
