@@ -1,74 +1,66 @@
-package com.example.searchapi.model.entity;
+package com.example.searchapi.model.vo;
 
-
-import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+/**
+ * 帖子视图
+ */
 @Data
-@TableName("post")
-public class Post implements Serializable {
+public class PostVO implements Serializable {
 
     /**
      * id
      */
-    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
-
     /**
-     * 标题
+     * title
      */
     private String title;
-
-
     /**
-     * 内容
+     * content
      */
     private String content;
-
-    /**
-     * 标签列表 json
-     */
-    private String tags;
-
-
     /**
      * 点赞数
      */
     private Integer thumbNum;
-
-
     /**
      * 收藏数
      */
     private Integer favourNum;
-
-
     /**
-     * 创建用户ID
+     * 创建用户id
      */
     private Long userId;
-
 
     /**
      * 创建时间
      */
     private Date createTime;
-
     /**
      * 更新时间
      */
     private Date updateTime;
+    /**
+     * 标签列表
+     */
+    private List<String> tagList;
 
     /**
-     * 是否删除
+     * 创建人信息
      */
-    @TableLogic
-    private Integer isDelete;
+    private UserVO userVO;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
+    /**
+     * 当前用户对该帖子是否已经点赞
+     */
+    private Boolean hasThumb;
+    /**
+     * 当前用户对该帖子是否已经收藏
+     */
+    private Boolean hasFavour;
 }

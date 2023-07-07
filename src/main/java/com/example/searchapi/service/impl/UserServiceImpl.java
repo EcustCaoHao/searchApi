@@ -7,6 +7,7 @@ import com.example.searchapi.exception.BusinessException;
 import com.example.searchapi.model.dto.user.UserQueryRequest;
 import com.example.searchapi.model.entity.User;
 import com.example.searchapi.model.vo.LoginUserVO;
+import com.example.searchapi.model.vo.UserVO;
 import com.example.searchapi.service.UserService;
 import com.example.searchapi.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -195,6 +196,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.like(StringUtils.isNotBlank(userName),"userName",userName);
         queryWrapper.orderBy(true,sortOrder.equals(SORT_ORDER_ASC),sortField);
         return queryWrapper;
+    }
+
+    /**
+     * 获取脱敏的用户视图
+     * @param user
+     * @return
+     */
+    @Override
+    public UserVO getUserVO(User user) {
+        if (user == null)
+            return null;
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user,userVO);
+        return userVO;
     }
 
 }

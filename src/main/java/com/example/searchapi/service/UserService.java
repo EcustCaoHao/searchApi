@@ -5,6 +5,7 @@ import com.example.searchapi.model.dto.user.UserQueryRequest;
 import com.example.searchapi.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.searchapi.model.vo.LoginUserVO;
+import com.example.searchapi.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -67,4 +68,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    /**
+     * 获取脱敏的用户信息 用户视图
+     * @param user
+     * @return
+     */
+    UserVO getUserVO(User user);
 }
