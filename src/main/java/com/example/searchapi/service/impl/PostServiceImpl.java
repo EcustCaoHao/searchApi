@@ -1,6 +1,10 @@
 package com.example.searchapi.service.impl;
 
+import cn.hutool.extra.cglib.CglibUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.searchapi.common.ErrorCode;
 import com.example.searchapi.exception.BusinessException;
@@ -8,6 +12,7 @@ import com.example.searchapi.mapper.PostFavourMapper;
 import com.example.searchapi.mapper.PostMapper;
 import com.example.searchapi.mapper.PostThumbMapper;
 import com.example.searchapi.mapper.UserMapper;
+import com.example.searchapi.model.dto.post.PostQueryRequest;
 import com.example.searchapi.model.entity.Post;
 import com.example.searchapi.model.entity.PostFavour;
 import com.example.searchapi.model.entity.PostThumb;
@@ -18,10 +23,15 @@ import com.example.searchapi.service.PostService;
 import com.example.searchapi.service.UserService;
 import com.example.searchapi.utils.PostUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
@@ -99,4 +109,55 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }
         return postVO;
     }
+
+    /**
+     * 获取查询条件
+     * @param postQueryRequest
+     * @return
+     */
+    @Override
+    public QueryWrapper<Post> getQueryWrapper(PostQueryRequest postQueryRequest) {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+        //没有查询条件 就是分页全量查询
+        if (postQueryRequest == null)
+            return queryWrapper;
+        String content = postQueryRequest.getContent();
+        String title = postQueryRequest.getTitle();
+        Long userId = postQueryRequest.getUserId();
+        List<String> tags = postQueryRequest.getTags();
+        if (StringUtils.isNotBlank(content))
+            queryWrapper.like("content",content);
+        if (StringUtils.isNotBlank(title))
+            queryWrapper.like("title",title);
+        if (userId!=null)
+            queryWrapper.like("userId",userId);
+        if (CollectionUtils.isNotEmpty(tags)){
+            for (String tag : tags){
+                queryWrapper.like("tags",tag);
+            }
+        }
+        return queryWrapper;
+    }
+
+    /**
+     * 分页获取帖子封装
+     * @param page
+     * @param request
+     * @return
+     */
+    @Override
+    public Page<PostVO> getPostVOPage(Page<Post> page, HttpServletRequest request) {
+        List<Post> postList = page.getRecords();
+        List<PostVO> postVOList = new ArrayList<>();
+        Page<PostVO> postVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        if (CollectionUtils.isEmpty(postList)) {
+            return postVOPage;
+        }
+        for (int i=0;i<postList.size();i++){
+            postVOList.add(getPostVO(postList.get(i),request));
+        }
+        postVOPage.setRecords(postVOList);
+        return postVOPage;
+    }
+
 }

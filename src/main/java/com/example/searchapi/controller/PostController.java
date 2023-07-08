@@ -1,5 +1,6 @@
 package com.example.searchapi.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.searchapi.annotation.AuthCheck;
 import com.example.searchapi.common.BaseResponse;
 import com.example.searchapi.common.DeleteRequest;
@@ -9,6 +10,7 @@ import com.example.searchapi.constant.UserConstant;
 import com.example.searchapi.enums.UserRoleEnum;
 import com.example.searchapi.exception.BusinessException;
 import com.example.searchapi.model.dto.post.PostAddRequest;
+import com.example.searchapi.model.dto.post.PostQueryRequest;
 import com.example.searchapi.model.dto.post.PostUpdateRequest;
 import com.example.searchapi.model.entity.Post;
 import com.example.searchapi.model.entity.User;
@@ -132,6 +134,20 @@ public class PostController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         PostVO postVO = postService.getPostVO(post, request);
         return ResultUtils.success(postVO);
+    }
+
+    /**
+     * 分页获取帖子（封装类）
+     * @param postQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/page/vo")
+    public BaseResponse<Page<PostVO>> listPostByPage(@RequestBody PostQueryRequest postQueryRequest,HttpServletRequest request){
+        long current = postQueryRequest.getCurrent();
+        long pageSize = postQueryRequest.getPageSize();
+        Page<Post> page = postService.page(new Page<>(current, pageSize), postService.getQueryWrapper(postQueryRequest));
+        return ResultUtils.success(postService.getPostVOPage(page,request));
     }
 
 
