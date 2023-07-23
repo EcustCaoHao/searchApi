@@ -49,6 +49,13 @@ public interface UserService extends IService<User> {
     List<LoginUserVO> getLoginUserVO(List<User> userList);
 
     /**
+     * 获取脱敏的用户信息
+     * @param userList
+     * @return
+     */
+    List<UserVO> getListUserVO(List<User> userList);
+
+    /**
      * 退出登录
      * @param request
      * @return

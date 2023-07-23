@@ -139,6 +139,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
+     * 获取脱敏的用户信息
+     * @param userList
+     * @return
+     */
+    public List<UserVO> getListUserVO(List<User> userList){
+        if (CollectionUtils.isEmpty(userList))
+            return new ArrayList<>();
+        return userList.stream().map(this::getUserVO).collect(Collectors.toList());
+    }
+
+    /**
      * 退出登录
      * @param request
      * @return

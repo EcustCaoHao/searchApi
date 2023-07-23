@@ -63,4 +63,6 @@ public class PostVO implements Serializable {
      * 当前用户对该帖子是否已经收藏
      */
     private Boolean hasFavour;
+
+    private static final long serialVersionUID = 1L;
 }
