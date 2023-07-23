@@ -10,6 +10,7 @@ import com.example.searchapi.model.vo.LoginUserVO;
 import com.example.searchapi.model.vo.UserVO;
 import com.example.searchapi.service.UserService;
 import com.example.searchapi.mapper.UserMapper;
+import com.example.searchapi.utils.SqlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -205,7 +206,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq(StringUtils.isNotBlank(userRole),"userRole",userRole);
         queryWrapper.like(StringUtils.isNotBlank(userProfile),"userProfile",userProfile);
         queryWrapper.like(StringUtils.isNotBlank(userName),"userName",userName);
-        queryWrapper.orderBy(true,sortOrder.equals(SORT_ORDER_ASC),sortField);
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField),sortOrder.equals(SORT_ORDER_ASC),sortField);
         return queryWrapper;
     }
 
