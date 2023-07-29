@@ -23,4 +23,6 @@ public interface PostService extends IService<Post> {
 
     Page<PostVO> getPostVOPage(Page<Post> page,HttpServletRequest request);
 
+    Page<PostVO> listPostByPage(PostQueryRequest postQueryRequest,HttpServletRequest request);
+
 }

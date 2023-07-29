@@ -1,6 +1,7 @@
 package com.example.searchapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.searchapi.common.ErrorCode;
 import com.example.searchapi.exception.BusinessException;
@@ -16,12 +17,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -222,6 +223,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user,userVO);
         return userVO;
+    }
+
+    @Override
+    public Page<LoginUserVO> listUserVOByPage(UserQueryRequest userQueryRequest) {
+        Page<User> userPage = this.page(new Page<>(userQueryRequest.getCurrent(), userQueryRequest.getPageSize()),
+                this.getQueryWrapper(userQueryRequest));
+        Page<LoginUserVO> userVOPage = new Page<>(userQueryRequest.getCurrent(), userQueryRequest.getPageSize(), userPage.getTotal());
+        List<LoginUserVO> userVO = this.getLoginUserVO(userPage.getRecords());
+        userVOPage.setRecords(userVO);
+        return userVOPage;
     }
 
 }

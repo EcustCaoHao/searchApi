@@ -1,11 +1,13 @@
 package com.example.searchapi.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.searchapi.model.dto.user.UserQueryRequest;
 import com.example.searchapi.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.searchapi.model.vo.LoginUserVO;
 import com.example.searchapi.model.vo.UserVO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -82,4 +84,6 @@ public interface UserService extends IService<User> {
      * @return
      */
     UserVO getUserVO(User user);
+
+    Page<LoginUserVO> listUserVOByPage(UserQueryRequest userQueryRequest);
 }

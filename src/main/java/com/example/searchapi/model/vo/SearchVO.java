@@ -1,9 +1,10 @@
 package com.example.searchapi.model.vo;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.searchapi.model.entity.Picture;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 帖子
@@ -13,11 +14,13 @@ import java.util.List;
 @Data
 public class SearchVO implements Serializable {
 
-    private List<UserVO> userVOList;
+    private Page<LoginUserVO> userVOList;
 
-    private List<PostVO> postVOList;
+    private Page<PostVO> postVOList;
 
-    private List<PictureVO> pictureVOList;
+    private Page<Picture> pictureVOList;
+
+    private Page<?> dataList;
 
     private static final long serialVersionUID = 1L;
 
